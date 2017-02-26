@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "HabiticaChrome",
+    "description": "The name of the application"
+  },
+  "appShortName": {
+    "message": "habitcrx",
+    "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name."
+  },
+  "appDescription": {
+    "message": "Chrome Client for Habitica",
+    "description": "The description of the application"
+  },
+  "browserActionTitle": {
+    "message": "HabiticaChrome",
+    "description": "The title of the browser action button"
+  }
+}
