@@ -20,9 +20,10 @@
 </template>
 
 <script>
+import storage from 'chrome-storage-wrapper';
+import Habitica from 'habitica';
 import Message from './Message.vue';
 import InputBox from './InputBox.vue';
-import storage from 'chrome-storage-wrapper';
 
 const STATE_MAPPING = {
   loading: 'Loading ...',
@@ -37,30 +38,21 @@ export default {
     return {
       messages: [],
       state: 'loading',
-      auth: null
+      api: null
     };
+  },
+  created() {
+    this.initApp();
   },
   computed: {
     description() {
       return STATE_MAPPING[this.state];
     }
   },
-  created() {
-    storage.get('auth').then((options) => {
-      if (options.auth) {
-        this.auth = options.auth;
-        this.fetchMessages();
-      } else {
-        this.state = 'unauthed';
-      }
-    });
-  },
   methods: {
     fetchMessages() {
-      const url = 'https://habitica.com/api/v3/groups/party/chat';
-      fetch(url, { headers: this.auth })
-        .then(response => response.json())
-        .then(json => this.messages = json.data.reverse())
+      this.api.get('/groups/party/chat')
+        .then(res => this.messages = res.data.reverse())
         .then(() => this.state = 'authed')
         .then(() => this.scrollToBottom())
         .catch(() => {
@@ -69,22 +61,9 @@ export default {
         });  
     },
     postMessage(message) {
-      const url = 'https://habitica.com/api/v3/groups/party/chat'
-
-      // const formData = new FormData();
-      // formData.append('message', message);
-      const reqInit = {
-        headers: Object.assign({}, this.auth, {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json;charset=UTF-8'
-        }),
-        method: 'POST',
-        body: JSON.stringify({ message })
-      };
-      fetch(url, reqInit)
-        .then(response => response.json())
-        .then(json => {
-          this.messages.push(json.data.message);
+      this.api.get('/groups/party/chat', { message })
+        .then(res => {
+          this.messages.push(res.data.message);
           this.scrollToBottom();
         });
     },
@@ -96,7 +75,7 @@ export default {
     },
     authorize() {
       this.state = 'authing';
-      const url = 'https://habitica.com/#/options/settings/api'
+      const url = 'https://habitica.com/favicon.ico'
       chrome.tabs.create({ url: url, active: false }, (tab) => {
         const script = {
           code: 'localStorage.getItem("habit-mobile-settings");',
@@ -105,17 +84,32 @@ export default {
         chrome.tabs.executeScript(tab.id, script, results => {
           if (results && results[0]) {
             chrome.tabs.remove(tab.id);
-            const json = JSON.parse(results[0]);
-            storage.set('auth', {
-              'x-api-user': json.auth.apiId,
-              'x-api-key': json.auth.apiToken
-            });
-            this.state = 'authed';
-            this.fetchMessages();
+            storage.set('auth', JSON.parse(results[0]).auth)
+              .then(() => {
+                this.state = 'authed';
+                this.initApp();
+              });
           } else {
             this.state = 'failed';
           }
         });
+      });
+    },
+    initApi(auth) {
+      this.api = new Habitica({
+        id: auth.apiId,
+        apiToken: auth.apiToken,
+        platform: 'HabiticaChrome'
+      });
+    },
+    initApp() {
+      storage.get('auth').then((options) => {
+        if (options.auth) {
+          this.initApi(options.auth);
+          this.fetchMessages();
+        } else {
+          this.state = 'unauthed';
+        }
       });
     }
   },
