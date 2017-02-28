@@ -40,6 +40,7 @@ gulp.task('scripts', (cb) => {
         }],
         loaders: [
           { test: /\.vue$/, loader: 'vue' },
+          { test: /\.json$/, loader: 'babel' },
           { test: /\.js$/, loader: 'babel' }
         ]
       },
