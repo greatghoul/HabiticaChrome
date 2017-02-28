@@ -54,7 +54,7 @@ export default {
         if (options.auth) {
           fetch(url, { headers: options.auth })
             .then(response => response.json())
-            .then(json => this.messages = json.data.reverse().slice(0, 10))
+            .then(json => this.messages = json.data.reverse())
             .then(() => this.state = 'authed')
             .then(() => this.scrollToBottom())
             .catch(() => {
@@ -121,6 +121,10 @@ export default {
 .auth p {
   margin-top: 0px;
   padding-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
+}
+
+.auth button {
+  margin-top: 10px;
 }
 </style>
