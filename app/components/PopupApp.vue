@@ -61,7 +61,7 @@ export default {
         });  
     },
     postMessage(message) {
-      this.api.get('/groups/party/chat', { message })
+      this.api.post('/groups/party/chat', { message })
         .then(res => {
           this.messages.push(res.data.message);
           this.scrollToBottom();
