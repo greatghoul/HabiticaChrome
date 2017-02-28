@@ -8,7 +8,7 @@
           :message="message" />
       </div>
 
-      <input-box></input-box>  
+      <input-box v-on:submit="postMessage"></input-box>  
     </section>
     <section v-else>
       <div class="auth">
@@ -36,7 +36,8 @@ export default {
   data() {
     return {
       messages: [],
-      state: 'loading'
+      state: 'loading',
+      auth: null
     };
   },
   computed: {
@@ -45,31 +46,51 @@ export default {
     }
   },
   created() {
-    this.fetchMessages();
+    storage.get('auth').then((options) => {
+      if (options.auth) {
+        this.auth = options.auth;
+        this.fetchMessages();
+      } else {
+        this.state = 'unauthed';
+      }
+    });
   },
   methods: {
     fetchMessages() {
       const url = 'https://habitica.com/api/v3/groups/party/chat';
-      storage.get('auth').then((options) => {
-        if (options.auth) {
-          fetch(url, { headers: options.auth })
-            .then(response => response.json())
-            .then(json => this.messages = json.data.reverse())
-            .then(() => this.state = 'authed')
-            .then(() => this.scrollToBottom())
-            .catch(() => {
-              this.state = 'unauthed';
-              storage.remove('auth');
-            });  
-        } else {
+      fetch(url, { headers: this.auth })
+        .then(response => response.json())
+        .then(json => this.messages = json.data.reverse())
+        .then(() => this.state = 'authed')
+        .then(() => this.scrollToBottom())
+        .catch(() => {
           this.state = 'unauthed';
-        }
-      });
+          storage.remove('auth');
+        });  
+    },
+    postMessage(message) {
+      const url = 'https://habitica.com/api/v3/groups/party/chat'
+
+      // const formData = new FormData();
+      // formData.append('message', message);
+      const reqInit = {
+        headers: Object.assign({}, this.auth, {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json;charset=UTF-8'
+        }),
+        method: 'POST',
+        body: JSON.stringify({ message })
+      };
+      fetch(url, reqInit)
+        .then(response => response.json())
+        .then(json => {
+          this.messages.push(json.data.message);
+          this.scrollToBottom();
+        });
     },
     scrollToBottom() {
       this.$nextTick(() => {
         const elem = this.$el.querySelector('.message-list');
-        console.log(elem);
         elem.scrollTop = elem.scrollHeight;
       });
     },

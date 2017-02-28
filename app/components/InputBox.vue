@@ -1,11 +1,26 @@
 <template>
   <div class="input-box">
-    <textarea placeholder="Type message to chat..." rows="1"></textarea>
+    <textarea
+      v-model="text"
+      v-on:keydown.meta.enter.stop.prevent="postMessage"
+      placeholder="Type message to chat..."></textarea>
   </div>
 </template>
 
 <script>
-  
+export default {
+  data() {
+    return {
+      text: '',
+    }
+  },
+  methods: {
+    postMessage() {
+      this.$emit('submit', this.text);
+      this.text = '';
+    }
+  }
+};
 </script>
 
 <style>
