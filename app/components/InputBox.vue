@@ -2,7 +2,7 @@
   <div class="input-box">
     <textarea
       v-model="text"
-      v-on:keydown.meta.enter.stop.prevent="postMessage"
+      v-on:keydown.enter.stop.prevent="onEnter"
       placeholder="Type message to chat..."></textarea>
   </div>
 </template>
@@ -18,6 +18,18 @@ export default {
     postMessage() {
       this.$emit('submit', this.text);
       this.text = '';
+    },
+    makeNewLine() {
+      document.execCommand('insertText', false, '\n');
+      const textarea = this.$el.querySelector('textarea');
+      textarea.scrollTop = textarea.scrollTop + 12;
+    },
+    onEnter(evt) {
+      if (evt.shiftKey) {
+        this.makeNewLine();
+      } else {
+        this.postMessage();
+      }
     }
   }
 };
