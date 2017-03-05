@@ -5,7 +5,7 @@ $sidebarLinkColorActive: #DDDDDD;
 $sidebarHeadingColor: #86a1b5;
 
 .sidebar {
-  width: 160px;
+  width: 180px;
   height: 100%;
   float: left;
   color: $sidebarLinkColor;
@@ -70,6 +70,22 @@ $sidebarHeadingColor: #86a1b5;
         @include ellipsis(true);
         margin-top: 0;
         margin-bottom: 10px;
+      }
+
+      .balance {
+        .diamond {
+          color: #7C94E1;
+          margin-right: 5px;
+        }
+
+        .gold {
+          color: #F9CC49;
+          margin-right: 5px;
+        }
+
+        .silver {
+          color: #C7C8C8;
+        }
       }
     }
   }

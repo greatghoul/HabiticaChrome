@@ -6,6 +6,17 @@
            class="avatar" />
       <div class="stats">
         <h4 class="name">{{ user.profile.name }}</h4>
+        <div class="balance">
+          <small class="diamond">
+            <i class="fa fa-diamond"></i> {{ diamond }}
+          </small>
+          <small class="gold">
+            <i class="fa fa-stop-circle"></i> {{ gold }}
+          </small>
+          <small class="silver">
+            <i class="fa fa-stop-circle"></i> {{ silver }}
+          </small>
+        </div>
       </div>
       <div class="clearfix"></div>
     </section>
@@ -30,6 +41,15 @@
 export default {
   props: ['user'],
   computed: {
+    diamond() {
+      return this.user.balance;
+    },
+    gold() {
+      return parseInt(this.user.stats.gp);
+    },
+    silver() {
+      return parseInt((this.user.stats.gp - this.gold) * 100);
+    },
     cachedAvatar() {
       return localStorage.getItem(`cached_avatar_${this.user.id}`);
     },
