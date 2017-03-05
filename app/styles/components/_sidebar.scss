@@ -1,0 +1,14 @@
+$sidebarBgColor: #205081;
+$sidebarLinkColor: #EEEEEE;
+$sidebarLinkColorActive: #DDDDDD;
+
+.sidebar {
+  width: 120px;
+  height: 100%;
+  float: left;
+  color: $sidebarLinkColor;
+  background-color: $sidebarBgColor;
+  a {
+    @include link-colors($sidebarLinkColor, $sidebarLinkColorActive);
+  }
+}

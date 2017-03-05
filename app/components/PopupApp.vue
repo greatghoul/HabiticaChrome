@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+  	<sidebar></sidebar>
     <section v-if="state == 'authed'">
       <div class="message-list">
       <message
@@ -24,6 +25,7 @@ import storage from 'chrome-storage-wrapper';
 import Habitica from 'habitica';
 import Message from './Message.vue';
 import InputBox from './InputBox.vue';
+import Sidebar from './Sidebar.vue';
 
 const STATE_MAPPING = {
   loading: 'Loading ...',
@@ -114,6 +116,7 @@ export default {
     }
   },
   components: {
+  	Sidebar,
     Message,
     InputBox
   }
@@ -121,6 +124,9 @@ export default {
 </script>
 
 <style>
+section {
+	margin-left: 120px;
+}
 .message-list {
   max-height: 300px;
   overflow: auto;

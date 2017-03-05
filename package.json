@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "chrome-storage-wrapper": "^0.1.4",
+    "compass-mixins": "^0.12.10",
     "habitica": "^4.0.0",
     "marked": "^0.3.6",
     "timeago-vue": "0.0.1",
