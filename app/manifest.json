@@ -24,6 +24,7 @@
   "permissions": [
     "tabs",
     "storage",
-    "https://habitica.com/*"
+    "https://habitica.com/*",
+    "https://habitica-assets.s3.amazonaws.com/avatars/*.png"
   ]
 }

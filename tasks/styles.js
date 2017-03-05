@@ -33,7 +33,8 @@ gulp.task('styles:less', function() {
 gulp.task('styles:sass', function() {
   const includePaths = [
     "./app",
-    "./node_modules/compass-mixins/lib"
+    "./node_modules/compass-mixins/lib",
+    "./node_modules/font-awesome/scss"
   ];
   return gulp.src('app/styles/*.scss')
     .pipe(gulpif(args.sourcemaps, sourcemaps.init()))

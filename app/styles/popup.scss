@@ -6,6 +6,11 @@ body {
 
 @import "compass/functions";
 @import "compass/typography/links/link-colors";
+@import "compass/typography/lists/bullets";
+@import "compass/typography/text/ellipsis";
+@import "font-awesome";
 
-@import 'components/application';
-@import 'components/sidebar';
+@import "helpers";
+@import "components/loader";
+@import "components/application";
+@import "components/sidebar";

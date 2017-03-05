@@ -6,5 +6,5 @@ Vue.use(VueMoment);
 
 new Vue({
   el: '#app',
-  render: h => h(PopupApp)
-})
+  render: (h) => h(PopupApp)
+});

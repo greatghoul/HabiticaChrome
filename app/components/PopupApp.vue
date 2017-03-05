@@ -1,66 +1,52 @@
 <template>
   <div id="app">
-  	<sidebar></sidebar>
-    <section v-if="state == 'authed'">
-      <div class="message-list">
-      <message
-          v-for="message in messages"
-          :key="message.id"
-          :message="message" />
-      </div>
+    <loader v-if="!ready" @ready="initialize"></loader>
 
-      <input-box v-on:submit="postMessage"></input-box>  
-    </section>
-    <section v-else>
-      <div class="auth">
-        <p>{{ description }}</p>
-        <button @click="authorize" v-if="state == 'unauthed'">Authorize</button>
-      </div>
-    </section>
+    <div class="app" v-else>
+      <sidebar :user="user"></sidebar>
+      <section class="content">
+        <div class="message-list">
+        <message
+            v-for="message in messages"
+            :key="message.id"
+            :message="message" />
+        </div>
+
+        <input-box v-on:submit="postMessage"></input-box>  
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
 import storage from 'chrome-storage-wrapper';
-import Habitica from 'habitica';
+import Habitica from '../scripts/habitica-client';
+import Loader from './Loader.vue';
 import Message from './Message.vue';
 import InputBox from './InputBox.vue';
 import Sidebar from './Sidebar.vue';
-
-const STATE_MAPPING = {
-  loading: 'Loading ...',
-  unauthed: 'Not authorized',
-  authing: 'Authorizing ...',
-  authed: '',
-  failed: 'Please login habitica first.'
-};
 
 export default {
   data() {
     return {
       messages: [],
-      state: 'loading',
-      api: null
+      ready: false,
+      api: null,
+      user: null
     };
   },
-  created() {
-    this.initApp();
-  },
   computed: {
-    description() {
-      return STATE_MAPPING[this.state];
-    }
   },
   methods: {
+    initialize(auth, user) {
+      this.api = new Habitica(auth);
+      this.user = user;
+      this.ready = true;
+    },
     fetchMessages() {
       this.api.get('/groups/party/chat')
         .then(res => this.messages = res.data.reverse())
-        .then(() => this.state = 'authed')
         .then(() => this.scrollToBottom())
-        .catch(() => {
-          this.state = 'unauthed';
-          storage.remove('auth');
-        });  
     },
     postMessage(message) {
       this.api.post('/groups/party/chat', { message })
@@ -75,77 +61,14 @@ export default {
         elem.scrollTop = elem.scrollHeight;
       });
     },
-    authorize() {
-      this.state = 'authing';
-      const url = 'https://habitica.com/favicon.ico'
-      chrome.tabs.create({ url: url, active: false }, (tab) => {
-        const script = {
-          code: 'localStorage.getItem("habit-mobile-settings");',
-          runAt: 'document_end'
-        };
-        chrome.tabs.executeScript(tab.id, script, results => {
-          if (results && results[0]) {
-            chrome.tabs.remove(tab.id);
-            storage.set('auth', JSON.parse(results[0]).auth)
-              .then(() => {
-                this.state = 'authed';
-                this.initApp();
-              });
-          } else {
-            this.state = 'failed';
-          }
-        });
-      });
-    },
     initApi(auth) {
-      this.api = new Habitica({
-        id: auth.apiId,
-        apiToken: auth.apiToken,
-        platform: 'HabiticaChrome'
-      });
-    },
-    initApp() {
-      storage.get('auth').then((options) => {
-        if (options.auth) {
-          this.initApi(options.auth);
-          this.fetchMessages();
-        } else {
-          this.state = 'unauthed';
-        }
-      });
     }
   },
   components: {
+    Loader,
   	Sidebar,
     Message,
     InputBox
   }
-};
+}
 </script>
-
-<style>
-section {
-	margin-left: 120px;
-}
-.message-list {
-  max-height: 300px;
-  overflow: auto;
-}
-.auth {
-  font-size: 16px;
-  color: #888;
-  text-align: center;
-  padding-bottom: 20px;
-  background-color: #eee;
-}
-
-.auth p {
-  margin-top: 0px;
-  padding-top: 20px;
-  margin-bottom: 0px;
-}
-
-.auth button {
-  margin-top: 10px;
-}
-</style>
