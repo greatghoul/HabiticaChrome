@@ -24,13 +24,12 @@ export default {
       user: null
     };
   },
-  computed: {
-  },
   methods: {
     initialize(auth, user) {
       this.api = new Habitica(auth);
       this.user = user;
       this.ready = true;
+      this.gotoPartyView();
     },
     postMessage(message) {
       this.api.post('/groups/party/chat', { message })
@@ -39,7 +38,10 @@ export default {
           this.scrollToBottom();
         });
     },
-    initApi(auth) {
+    gotoPartyView() {
+      if (this.user.party && this.user.party._id) {
+        this.$router.push({ path: `/group/${this.user.party._id}` });
+      }
     }
   },
   components: {

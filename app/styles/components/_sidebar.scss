@@ -46,7 +46,8 @@ $sidebarHeadingColor: #86a1b5;
           padding: 3px 5px 3px 8px;
           text-decoration: none;
 
-          &:hover {
+          &:hover,
+          &.router-link-active {
             background-color: $sidebarBorderColor;
           }
         }
