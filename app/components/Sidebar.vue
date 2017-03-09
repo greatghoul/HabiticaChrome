@@ -30,7 +30,7 @@
       </h3>
       <ul>
         <li v-for="group in user.groups">
-          <a href="###" :title="group.name">{{ group.name }}</a>
+          <router-link :to="groupUrl(group.id)" :title="group.name">{{ group.name }}</router-link>
         </li>
       </ul>
     </section>
@@ -64,6 +64,9 @@ export default {
     this.cacheAvatar();
   },
   methods: {
+    groupUrl(id) {
+      return `/group/${id}`;
+    },
     cacheAvatar() {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');

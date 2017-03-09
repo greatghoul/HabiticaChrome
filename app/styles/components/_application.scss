@@ -1,14 +1,5 @@
 .app {
   width: 640px;
   height: 480px;
-
-  .content {
-    margin-left: 180px;
-
-    .message-list {
-      max-height: 460px;
-      overflow: auto;
-    }
-  }
 }
 
