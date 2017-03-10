@@ -17,6 +17,19 @@
             <i class="fa fa-stop-circle"></i> {{ silver }}
           </small>
         </div>
+
+        <status-bar label="HP"
+                    color="#ff4f4f"
+                    :value="user.stats.hp"
+                    :max="user.stats.maxHealth" />
+        <status-bar label="MP"
+                    color="#4141ff"
+                    :value="user.stats.mp"
+                    :max="user.stats.maxMP" />
+        <status-bar label="EXP"
+                    color="#e8e879"
+                    :value="user.stats.exp"
+                    :max="user.stats.toNextLevel" />
       </div>
       <div class="clearfix"></div>
     </section>
@@ -38,6 +51,8 @@
 </template>  
 
 <script>
+import StatusBar from './StatusBar.vue';
+
 export default {
   props: ['user'],
   computed: {
@@ -85,6 +100,9 @@ export default {
       image.crossOrigin = 'anonymous';
       image.src = this.avatar;
     }
+  },
+  components: {
+    StatusBar
   }
 }
 </script>

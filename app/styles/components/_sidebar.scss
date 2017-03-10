@@ -74,6 +74,8 @@ $sidebarHeadingColor: #86a1b5;
       }
 
       .balance {
+        margin-bottom: 5px;
+
         .diamond {
           color: #7C94E1;
           margin-right: 5px;
@@ -86,6 +88,15 @@ $sidebarHeadingColor: #86a1b5;
 
         .silver {
           color: #C7C8C8;
+        }
+      }
+
+      .status-bar {
+        background-color: $sidebarBorderColor;
+        margin-bottom: 5px;
+
+        .progress {
+          height: 3px;
         }
       }
     }
