@@ -58,10 +58,13 @@
   },
   "dependencies": {
     "chrome-storage-wrapper": "^0.1.4",
+    "compass-mixins": "^0.12.10",
+    "font-awesome": "^4.7.0",
     "habitica": "^4.0.0",
     "marked": "^0.3.6",
     "timeago-vue": "0.0.1",
     "vue": "^2.2.1",
-    "vue-moment": "^2.0.2"
+    "vue-moment": "^2.0.2",
+    "vue-router": "^2.3.0"
   }
 }

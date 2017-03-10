@@ -1,6 +1,17 @@
 body {
-  width: 320px;
   margin: 0;
   padding: 0;
-  min-height: auto;
+  font-size: 12px;
 }
+
+@import "compass/functions";
+@import "compass/typography/links/link-colors";
+@import "compass/typography/lists/bullets";
+@import "compass/typography/text/ellipsis";
+@import "font-awesome";
+
+@import "helpers";
+@import "components/application";
+@import "components/loader";
+@import "components/group-view";
+@import "components/sidebar";

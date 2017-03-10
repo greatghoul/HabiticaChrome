@@ -1,0 +1,107 @@
+$sidebarBgColor: #205081;
+$sidebarBorderColor: #206090;
+$sidebarLinkColor: #EEEEEE;
+$sidebarLinkColorActive: #DDDDDD;
+$sidebarHeadingColor: #86a1b5;
+
+.sidebar {
+  width: 180px;
+  height: 100%;
+  float: left;
+  color: $sidebarLinkColor;
+  background-color: $sidebarBgColor;
+  a {
+    @include link-colors($sidebarLinkColor, $sidebarLinkColorActive);
+  }
+
+  section {
+    margin: 0;
+    padding: 0;
+    
+    h3 {
+      margin: 0;
+      padding: 3px 5px;
+      font-size: 1em;
+      text-transform: uppercase;
+      color: $sidebarHeadingColor;
+      border-bottom: 1px solid $sidebarBorderColor;
+
+      .icon {
+        float: right;
+        font-size: .9em;
+      }
+    }
+
+    ul {
+      @include no-bullet;
+      margin: 0;
+      padding: 0;
+
+      li {
+        padding: 0;
+
+        a {
+          @include ellipsis(true);
+          display: block;
+          padding: 3px 5px 3px 8px;
+          text-decoration: none;
+
+          &:hover,
+          &.router-link-active {
+            background-color: $sidebarBorderColor;
+          }
+        }
+      }
+    }
+  }
+
+  .profile {
+    padding: 6px;
+
+    .avatar {
+      float: left;
+      width: 64px;
+      height: 64px;
+    }
+
+    .stats {
+      margin-left: 70px;
+
+      .name {
+        @include ellipsis(true);
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .balance {
+        margin-bottom: 5px;
+
+        .diamond {
+          color: #7C94E1;
+          margin-right: 5px;
+        }
+
+        .gold {
+          color: #F9CC49;
+          margin-right: 5px;
+        }
+
+        .silver {
+          color: #C7C8C8;
+        }
+      }
+
+      .status-bar {
+        background-color: $sidebarBorderColor;
+        margin-bottom: 5px;
+
+        .progress {
+          height: 3px;
+        }
+      }
+    }
+  }
+
+  .groups {
+  }
+}

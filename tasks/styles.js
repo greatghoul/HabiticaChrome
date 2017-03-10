@@ -31,9 +31,14 @@ gulp.task('styles:less', function() {
 });
 
 gulp.task('styles:sass', function() {
+  const includePaths = [
+    "./app",
+    "./node_modules/compass-mixins/lib",
+    "./node_modules/font-awesome/scss"
+  ];
   return gulp.src('app/styles/*.scss')
     .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
-    .pipe(sass({ includePaths: ['./app']}).on('error', function(error) {
+    .pipe(sass({ includePaths: includePaths }).on('error', function(error) {
       gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
       this.emit('end');
     }))
