@@ -48,7 +48,7 @@
       </ul>
     </section>
   </div>
-</template>  
+</template>
 
 <script>
 import StatusBar from './StatusBar.vue';
@@ -91,7 +91,6 @@ export default {
         context.drawImage(image, 0, 0, 64, 64);
 
         const dataUrl = canvas.toDataURL();
-        // this.$refs.avatar.src = dataUrl;
         localStorage.setItem(`cached_avatar_${this.user.id}`, dataUrl);
       };
 

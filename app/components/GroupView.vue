@@ -7,7 +7,7 @@
           :message="message" />
     </div>
 
-    <input-box v-on:submit="postMessage"></input-box>
+    <input-box @submit="postMessage" :id="id" ref="inputBox" />
   </div>
 </template>
 
@@ -23,17 +23,21 @@ export default {
     };
   },
   created() {
-    this.fetchMessages();
+    this.initialize()
   },
   computed: {
     api() {
-      return this.$parent.api;
+      return this.$parent.api
     },
     groupUrl() {
-      return `/groups/${this.id}/chat`;
+      return `/groups/${this.id}/chat`
     }
   },
   methods: {
+    initialize() {
+      this.fetchMessages()
+      this.$nextTick(() => this.$refs.inputBox.initialize())
+    },
     fetchMessages() {
       this.messages = [];
       this.api.get(this.groupUrl)
@@ -43,20 +47,20 @@ export default {
     postMessage(message) {
       this.api.post(this.groupUrl, { message })
         .then(res => {
-          this.messages.push(res.data.message);
-          this.scrollToBottom();
+          this.messages.push(res.data.message)
+          this.scrollToBottom()
         });
     },
     scrollToBottom() {
       this.$nextTick(() => {
-        const elem = this.$el.querySelector('.message-list');
-        elem.scrollTop = elem.scrollHeight;
+        const elem = this.$el.querySelector('.message-list')
+        elem.scrollTop = elem.scrollHeight
       });
     },
   },
   watch: {
     id() {
-      this.fetchMessages();
+      this.initialize()
     }
   },
   components: {
