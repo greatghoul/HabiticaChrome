@@ -1,5 +1,5 @@
 <template>
-  <div class="status-bar" :title="title">
+  <div class="status-bar" v-tooltip="title">
     <div class="progress" :style="style"></div>
   </div>
 </template>
