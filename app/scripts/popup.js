@@ -4,13 +4,15 @@ import VueMoment from 'vue-moment'
 import { VTooltip } from 'v-tooltip'
 import PopupApp from '../components/PopupApp.vue'
 import GroupView from '../components/GroupView.vue'
+import TaskView from '../components/TaskView.vue'
 
 Vue.use(VueRouter)
 Vue.use(VueMoment)
 Vue.directive('tooltip', VTooltip)
 
 const routes = [
-  { path: '/group/:id', component: GroupView, props: true }
+  { path: '/group/:id', component: GroupView, props: true },
+  { path: '/list/:id', component: TaskView, props: true }
 ]
 
 const router = new VueRouter({

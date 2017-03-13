@@ -33,6 +33,20 @@
       </div>
       <div class="clearfix"></div>
     </section>
+    <section class="lists">
+      <h3>
+        <span class="icon">
+          <i class="fa fa-tasks"></i>
+        </span>
+
+        Tasks
+      </h3>
+      <ul>
+        <li v-for="list in user.lists">
+          <router-link :to="listUrl(list)">{{ list }}</router-link>
+        </li>
+      </ul>
+    </section>
     <section class="groups">
       <h3>
         <span class="icon">
@@ -57,30 +71,33 @@ export default {
   props: ['user'],
   computed: {
     diamond() {
-      return this.user.balance;
+      return this.user.balance
     },
     gold() {
-      return parseInt(this.user.stats.gp);
+      return parseInt(this.user.stats.gp)
     },
     silver() {
-      return parseInt((this.user.stats.gp - this.gold) * 100);
+      return parseInt((this.user.stats.gp - this.gold) * 100)
     },
     cachedAvatar() {
-      return localStorage.getItem(`cached_avatar_${this.user.id}`);
+      return localStorage.getItem(`cached_avatar_${this.user.id}`)
     },
     avatar() {
-      return `https://habitica.com/export/avatar-${this.user.id}.png`;
+      return `https://habitica.com/export/avatar-${this.user.id}.png`
     },
     avatarUrl() {
-      return this.cachedAvatar || this.avatar;
+      return this.cachedAvatar || this.avatar
     }
   },
   created() {
-    this.cacheAvatar();
+    this.cacheAvatar()
   },
   methods: {
     groupUrl(id) {
-      return `/group/${id}`;
+      return `/group/${id}`
+    },
+    listUrl(id) {
+      return `/list/${id}`
     },
     cacheAvatar() {
       const canvas = document.createElement('canvas');
