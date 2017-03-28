@@ -5,13 +5,13 @@
       v-model="text"
       @keydown.enter.stop.prevent="onEnter"
       @change="onChange"
-      placeholder="Type message to chat..."></textarea>
+      :placeholder="placeholder"></textarea>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['id'],
+  props: ['name', 'placeholder'],
   data() {
     return {
       text: '',
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     messageKey() {
-      return `group-message-${this.id}`
+      return `input-box-${this.name}`
     }
   },
   created() {
@@ -55,23 +55,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.input-box {
-  background-color: #cccccc;
-  margin-top: 3px;
-}
-
-.input-box textarea {
-  width: calc(100% - 12px);
-  padding: 3px;
-  margin: 3px 3px 1px 3px;
-  border: none;
-  resize: none;
-}
-
-.input-box textarea:focus {
-  outline-offset: 0;
-  outline: 0;
-}
-</style>

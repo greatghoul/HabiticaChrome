@@ -1,13 +1,17 @@
 <template>
-  <div class="group-view">
-    <div class="message-list">
+  <div class="view group-view">
+    <div class="list message-list">
       <message
           v-for="message in messages"
           :key="message.id"
           :message="message" />
     </div>
 
-    <input-box @submit="postMessage" :id="id" ref="inputBox" />
+    <input-box
+      @submit="postMessage"
+      :name="id"
+      ref="inputBox"
+      placeholder="Type message here ..." />
   </div>
 </template>
 

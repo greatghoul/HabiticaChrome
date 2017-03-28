@@ -12,7 +12,7 @@ Vue.directive('tooltip', VTooltip)
 
 const routes = [
   { path: '/group/:id', component: GroupView, props: true },
-  { path: '/list/:id', component: TaskView, props: true }
+  { path: '/tasks/:type', component: TaskView, props: true }
 ]
 
 const router = new VueRouter({

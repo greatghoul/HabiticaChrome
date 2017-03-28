@@ -96,8 +96,8 @@ export default {
     groupUrl(id) {
       return `/group/${id}`
     },
-    listUrl(id) {
-      return `/list/${id}`
+    listUrl(type) {
+      return `/tasks/${type}`
     },
     cacheAvatar() {
       const canvas = document.createElement('canvas');
