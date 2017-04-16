@@ -10,7 +10,8 @@
       <task
           v-for="task in tasks"
           :key="task.id"
-          :task="task" />
+          :task="task"
+          @remove="removeTask" />
     </div>
   </div>
 </template>
@@ -52,6 +53,15 @@ export default {
     createTask(text) {
       this.api.post('/tasks/user', { text, type: this.list.type })
         .then(res => this.tasks.unshift(res.data))
+        .then(() => this.scrollToBottom())
+    },
+    removeTask(task) {
+      const always = () => {
+        const index = _.findIndex(this.tasks, { id: task.id })
+        this.tasks.splice(index, 1)
+      }
+      this.api.del(`/tasks/${task.id}`)
+        .then(always, always)
         .then(() => this.scrollToBottom())
     },
     scrollToBottom() {

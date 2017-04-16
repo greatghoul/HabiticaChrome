@@ -7,6 +7,23 @@
     .task {
       border-bottom: 1px solid #ddd;
       padding: 3px 5px;
+      position: relative;
+
+      .actions {
+        display: none;
+      }
+
+      &:hover .actions {
+        display: block;
+        position: absolute;
+        right: 5px;
+        top: 3px;
+        font-size: 14px;
+
+        a {
+          color: #aaa;
+        }
+      }
     }
   }
 }
