@@ -39,11 +39,11 @@
           <i class="fa fa-tasks"></i>
         </span>
 
-        Tasks
+        Lists
       </h3>
       <ul>
-        <li v-for="list in user.lists">
-          <router-link :to="listUrl(list)">{{ list }}</router-link>
+        <li v-for="list in lists">
+          <router-link :to="listUrl(list.id)">{{ list.name }}</router-link>
         </li>
       </ul>
     </section>
@@ -65,10 +65,16 @@
 </template>
 
 <script>
-import StatusBar from './StatusBar.vue';
+import StatusBar from './StatusBar.vue'
+import { LISTS } from '../scripts/consts'
 
 export default {
   props: ['user'],
+  data() {
+    return {
+      lists: LISTS
+    }
+  },
   computed: {
     diamond() {
       return this.user.balance
@@ -96,8 +102,8 @@ export default {
     groupUrl(id) {
       return `/group/${id}`
     },
-    listUrl(type) {
-      return `/tasks/${type}`
+    listUrl(id) {
+      return `/list/${id}`
     },
     cacheAvatar() {
       const canvas = document.createElement('canvas');

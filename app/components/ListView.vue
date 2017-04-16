@@ -1,7 +1,8 @@
 <template>
-  <div class="view task-view">
+  <div class="view list-view">
     <input-box
-      :name="type"
+      :name="id"
+      @submit="createTask"
       ref="inputBox"
       placeholder="Type todos here ..." />
 
@@ -17,9 +18,10 @@
 <script>
 import Task from './Task.vue'
 import InputBox from './InputBox.vue'
+import { LISTS } from '../scripts/consts'
 
 export default {
-  props: ['type'],
+  props: ['id'],
   data() {
     return {
       tasks: []
@@ -31,6 +33,9 @@ export default {
   computed: {
     api() {
       return this.$parent.api
+    },
+    list() {
+      return _.find(LISTS, { id: this.id })
     }
   },
   methods: {
@@ -40,8 +45,13 @@ export default {
     },
     fetchTasks() {
       this.tasks = []
-      this.api.get('/tasks/user', { type: this.type })
+      this.api.get('/tasks/user', { type: this.id })
         .then(res => this.tasks = res.data)
+        .then(() => this.scrollToBottom())
+    },
+    createTask(text) {
+      this.api.post('/tasks/user', { text, type: this.list.type })
+        .then(res => this.tasks.unshift(res.data))
         .then(() => this.scrollToBottom())
     },
     scrollToBottom() {
@@ -52,7 +62,7 @@ export default {
     },
   },
   watch: {
-    type() {
+    id() {
       this.initialize()
     }
   },

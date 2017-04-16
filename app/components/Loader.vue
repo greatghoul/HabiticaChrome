@@ -10,6 +10,7 @@
 <script>
 import storage from 'chrome-storage-wrapper'
 import Habitica from '../scripts/habitica-client'
+import { LISTS } from '../scripts/consts'
 
 export default {
   data() {
@@ -70,8 +71,7 @@ export default {
       this.message = 'Authorized'
       const user = results[0].data
       const groups = results[1].data
-      const lists = ['habits', 'dailys', 'todos', 'rewards']
-      this.$emit('ready', this.auth, Object.assign(user, { groups, lists }))
+      this.$emit('ready', this.auth, Object.assign(user, { groups }))
     },
     failure(error) {
       this.failed = true
