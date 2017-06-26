@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import storage from 'chrome-storage-wrapper'
-import Habitica from '../scripts/habitica-client'
+import api from '../scripts/api'
 import Loader from './Loader.vue'
 import Sidebar from './Sidebar.vue'
 
@@ -20,19 +19,17 @@ export default {
     return {
       messages: [],
       ready: false,
-      api: null,
       user: null
     }
   },
   methods: {
-    initialize(auth, user) {
-      this.api = new Habitica(auth)
+    initialize(user) {
       this.user = user
       this.ready = true
       this.gotoPartyView()
     },
     postMessage(message) {
-      this.api.post('/groups/party/chat', { message })
+      api().post('/groups/party/chat', { message })
         .then(res => {
           this.messages.push(res.data.message)
           this.scrollToBottom()

@@ -42,9 +42,7 @@
         Lists
       </h3>
       <ul>
-        <li v-for="list in lists">
-          <router-link :to="listUrl(list.id)">{{ list.name }}</router-link>
-        </li>
+        <li><router-link to="/list/todos">Todos</router-link></li>
       </ul>
     </section>
     <section class="groups">
@@ -66,15 +64,9 @@
 
 <script>
 import StatusBar from './StatusBar.vue'
-import { LISTS } from '../scripts/consts'
 
 export default {
   props: ['user'],
-  data() {
-    return {
-      lists: LISTS
-    }
-  },
   computed: {
     diamond() {
       return this.user.balance

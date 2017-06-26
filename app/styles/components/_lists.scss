@@ -9,6 +9,26 @@
       padding: 3px 5px;
       position: relative;
 
+      .check {
+        float: left;
+        margin: 2px;
+        width: 13px;
+        height: 13px;
+      }
+
+      .title {
+        margin-left: 20px;
+
+        & > p {
+          margin: 0;
+        }
+      }
+
+      &.completed .title {
+        color: #888888;
+        text-decoration: line-through;
+      }
+
       .actions {
         display: none;
       }

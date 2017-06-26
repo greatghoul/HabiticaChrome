@@ -16,8 +16,9 @@
 </template>
 
 <script>
-import Message from './Message.vue';
-import InputBox from './InputBox.vue';
+import api from '../scripts/api'
+import Message from './Message.vue'
+import InputBox from './InputBox.vue'
 
 export default {
   props: ['id'],
@@ -30,9 +31,6 @@ export default {
     this.initialize()
   },
   computed: {
-    api() {
-      return this.$parent.api
-    },
     groupUrl() {
       return `/groups/${this.id}/chat`
     }
@@ -44,7 +42,7 @@ export default {
     },
     fetchMessages() {
       this.messages = [];
-      this.api.get(this.groupUrl)
+      api().get(this.groupUrl)
         .then(res => this.messages = res.data.reverse())
         .then(() => this.scrollToBottom())
     },
@@ -59,7 +57,7 @@ export default {
       this.$nextTick(() => {
         const elem = this.$el.querySelector('.message-list')
         elem.scrollTop = elem.scrollHeight
-      });
+      })
     },
   },
   watch: {

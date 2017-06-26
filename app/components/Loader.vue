@@ -8,9 +8,7 @@
 </template>
 
 <script>
-import storage from 'chrome-storage-wrapper'
-import Habitica from '../scripts/habitica-client'
-import { LISTS } from '../scripts/consts'
+import api from '../scripts/api'
 
 export default {
   data() {
@@ -26,18 +24,14 @@ export default {
   },
   methods: {
     initialize() {
-      storage.get('auth').then((options) => {
-        if (options.auth) {
-          this.auth = options.auth
-          this.fetchUser()
-        } else {
-          this.fetchAuth()
-        }
-      })
+      if ('auth' in localStorage) {
+        this.fetchUser()
+      } else {
+        this.fetchAuth()
+      }
     },
     fetchUser() {
-      const api = new Habitica(this.auth)
-      api.getUserWithGroups().then(this.success, this.failure)
+      api().getUserWithGroups().then(this.success, this.failure)
     },
     fetchAuth() {
       const url = 'https://habitica.com/favicon.ico'
@@ -55,13 +49,7 @@ export default {
     parse(result) {
       const auth = result ? JSON.parse(result).auth : {}
       if (auth.apiId && auth.apiToken) {
-        this.auth = {
-          id: auth.apiId,
-          apiToken: auth.apiToken,
-          platform: 'HabiticaChrome'
-        }
-
-        storage.set('auth', Object.assign({}, this.auth))
+        localStorage.setItem('auth', JSON.stringify({ id: auth.apiId, apiToken: auth.apiToken }))
         this.fetchUser()
       } else {
         this.failure()
@@ -71,14 +59,13 @@ export default {
       this.message = 'Authorized'
       const user = results[0].data
       const groups = results[1].data
-      this.$emit('ready', this.auth, Object.assign(user, { groups }))
+      this.$emit('ready', Object.assign(user, { groups }))
     },
     failure(error) {
       this.failed = true
       this.message = "Can't get authorized"
-      this.hint = `Please make sure you have logged into
-                   <a href="https://habitica.com/"
-                      target="_blank">habitica.com</a>`
+      this.hint = 'Please make sure you have logged into '
+                  '<a href="https://habitica.com/" target="_blank">habitica.com</a>'
       error && console.error(error)
     }
   }
