@@ -3,7 +3,7 @@
     <input-box :name="id" @submit="createTask" ref="inputBox" placeholder="Type todos here ..." />
 
     <div class="list task-list">
-      <todo v-for="task in tasks" :key="task.id" :task="task" @remove="removeTask" />
+      <todo v-for="task in tasks" :key="task.id" :task="task" @remove="removeTask" @score="scoreTask" />
     </div>
   </div>
 </template>
@@ -23,6 +23,13 @@ export default {
   },
   created() {
     api().getUserTasks('todos').then(data => this.tasks = data)
+  },
+  methods: {
+    scoreTask(task, direction) {
+      console.log(task, direction)
+      api().post(`/tasks/${task.id}/score/${direction}`)
+        .catch(() => task.completed = !task.completed)
+    }
   },
   components: {
     Todo,
