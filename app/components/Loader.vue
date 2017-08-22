@@ -20,46 +20,63 @@ export default {
     }
   },
   created() {
-    this.initialize()
+    setTimeout(this.initialize, 100)
   },
   methods: {
     initialize() {
-      if ('auth' in localStorage) {
-        this.fetchUser()
-      } else {
-        this.fetchAuth()
-      }
+      this.fetchAuth().then(() => this.fetchUser())
     },
     fetchUser() {
-      api().getUserWithGroups().then(this.success, this.failure)
+      if ('user' in localStorage) {
+        this.success(JSON.parse(localStorage['user']))
+      } else {
+        api().getUserWithGroups()
+          .then(results => {
+            const user = Object.assign({}, results[0].data, { groups: results[1].data })
+            localStorage['user'] = JSON.stringify(user)
+            this.success(user)
+          })
+          .catch(this.failure)
+      }
     },
     fetchAuth() {
-      const url = 'https://habitica.com/favicon.ico'
-      chrome.tabs.create({ url, active: false }, this.inject)
+      if ('auth' in localStorage) {
+        return Promise.resolve(localStorage['auth'])
+      } else {
+        return new Promise((resolve, reject) => {
+          const url = 'https://habitica.com/favicon.ico'
+          chrome.tabs.create({ url, active: false }, (tab) => {
+            this.findPageAuth(tab, results => {
+              chrome.tabs.remove(tab.id)
+              try {
+                const auth = this.parseAuthResult(results[0])
+                localStorage['auth'] = JSON.stringify(auth)
+                resolve(auth)
+              } catch(e) {
+                reject(e)
+              }
+            })
+          })
+        })  
+      }
     },
-    inject(tab) {
+    findPageAuth(tab, callback) {
       chrome.tabs.executeScript(tab.id, {
         code: 'localStorage.getItem("habit-mobile-settings")',
         runAt: 'document_end'
-      }, (results) => {
-        chrome.tabs.remove(tab.id)
-        this.parse(results && results[0])
-      })
+      }, callback)
     },
-    parse(result) {
+    parseAuthResult(result) {
       const auth = result ? JSON.parse(result).auth : {}
       if (auth.apiId && auth.apiToken) {
-        localStorage.setItem('auth', JSON.stringify({ id: auth.apiId, apiToken: auth.apiToken }))
-        this.fetchUser()
+        return { id: auth.apiId, apiToken: auth.apiToken }
       } else {
-        this.failure()
+        throw "Can't get authorized"
       }
     },
-    success(results) {
+    success(user) {
       this.message = 'Authorized'
-      const user = results[0].data
-      const groups = results[1].data
-      this.$emit('ready', Object.assign(user, { groups }))
+      this.$emit('ready', user)
     },
     failure(error) {
       this.failed = true
